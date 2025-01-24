@@ -1,7 +1,5 @@
-// RegExp : Permet de chercher si certains éléments sont présent (Ex: Présence du "@" dans l'email) / Cours "Le Réacteur" à 10min de la vidéo "Cours sur les Filters", catégorie "Back", Jour 6
-// MODEL
+// MODELS
 const MovieModel = require("../models/Movie");
-const CategoryListMoviesModel = require("../models/CategoryMovie");
 
 const movieCtrl = {
   //////////////////////////////////////////////////////
