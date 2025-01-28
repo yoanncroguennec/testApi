@@ -8,7 +8,7 @@ const patientCtrl = require("../controllers/PatientCtrl");
 // });
 
 router.route("/").get(patientCtrl.getAllPatients);
-// router.route("/:id").get(userCtrl.getUser);
+router.route("/:id").get(userCtrl.getUser);
 // PUT
 //   router.put("/updateUser_ViaParamsId/:id", userCtrl.update_UserViaParamsId);
 // DELETE

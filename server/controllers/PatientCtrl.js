@@ -21,15 +21,15 @@ const patientCtrl = {
   ///////////////////
   //// GET PATIENT BY ID ////
   ///////////////////
-  //   getPatient: async (req, res, next) => {
-  //     try {
-  //       const user = await PatientModel.findById(req.params.id);
+    getPatient: async (req, res, next) => {
+      try {
+        const user = await PatientModel.findById(req.params.id);
 
-  //       res.json(user);
-  //     } catch (error) {
-  //       res.status(400).json({ message: error.message });
-  //     }
-  //   },
+        res.json(user);
+      } catch (error) {
+        res.status(400).json({ message: error.message });
+      }
+    },
 
   ///////////////////////
   //// GET ALL USERS ////
