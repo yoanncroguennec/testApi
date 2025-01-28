@@ -20,21 +20,6 @@ const patientCtrl = {
     }
   },
 
-  ////////
-  // POST PATIENTS
-  ////////
-  createPatient: async (req, res, next) => {
-    try {
-      const newPatient = new WeeklyMenus_Model(req.body);
-
-      const savedData = await newPatient.save();
-      // res.status(200).json(savedData);
-      res.status(200).json({ message: "Patient created successfully." });
-    } catch (error) {
-      res.status(500).json({ errorMessage: error.message });
-    }
-  },
-
   ///////////////////
   //// GET PATIENT BY ID ////
   ///////////////////

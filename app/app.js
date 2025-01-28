@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
   res.send(userIp);
   // return res.json({ userIp });
 });
-app.use("/api/movies", require("../server/routes/Movies.Routes"));
+// app.use("/api/movies", require("../server/routes/Movies.Routes"));
 app.use("/api/auth", require("../server/routes/Auth.Routes"));
 app.use("/api/patients", require("../server/routes/Patients.Routes"));
 app.use(

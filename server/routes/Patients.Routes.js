@@ -7,10 +7,7 @@ const patientCtrl = require("../controllers/PatientCtrl");
 //   res.status(400).json({ message: "test" });
 // });
 
-router
-  .route("/")
-  .get(patientCtrl.getAllPatients)
-  .post(patientCtrl.createPatient);
+router.route("/").get(patientCtrl.getAllPatients)
 
 router.route("/:id").get(patientCtrl.getPatient);
 // PUT

@@ -4,28 +4,32 @@ const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
 const ip = require("ip");
 // MODELS
-const UserModel = require("../models/Auth");
+const PatientModel = require("../../models/Patient");
 // FOR CLOUDINARY
 // Fonction permettant de transformer un Buffer en Base64
 // const convertToBase64 = require("../utils/functions/forCloudinary/convertToBase64");
 // Import du package cloudinary
 // const cloudinary = require("cloudinary").v2;
 
-const authCtrl = {
+const authPatientCtrl = {
   signup: async (req, res, next) => {
     try {
-      const user = await UserModel.findOne({ email: req.body.email });
-      if (user) {
+      const patient = await PatientModel.findOne({
+        patientEmail: req.body.patientEmail,
+      });
+      if (patient) {
         res.status(409).json({ message: "Cette email est déjà prise." });
       } else {
-        // l'user a bien envoyé les infos requises ?
+        // le patient a bien envoyé les infos requises ?
         if (
           // Les champs OBLIGATOIRE a remplir
-          req.body.email &&
           req.body.password &&
-          req.body.username &&
-          req.body.firstName &&
-          req.body.lastName
+          req.body.avatar &&
+          req.body.patientLastName &&
+          req.body.patientFirstName &&
+          req.body.patientEmail &&
+          req.body.roomNumber &&
+          req.body.typeOfFeed
         ) {
           // STEP 1 : encrypter le mot de passe
           // Générer le token et encrypter le mot de passe
@@ -35,30 +39,31 @@ const authCtrl = {
           // "encBase64" Donner en argument
           const hash = SHA256(req.body.password + salt).toString(encBase64);
 
-          const userIp = ip.address();
-          console.log(userIp);
+          const patientIp = ip.address();
+          console.log(patientIp);
 
           // STEP 2 : créer le nouvel utilisateur
-          const newUser = new UserModel({
-            // Les champs que l'user à remplit (pas forcément obligatoire)
-            ipAddress: userIp,
-            email: req.body.email,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            admin: req.body.admin,
+          const newPatient = new PatientModel({
+            // Les champs que le patient à remplit (pas forcément obligatoire)
+            ipAddress: patientIp,
+            avatar: req.body.avatar,
+            patientLastName: req.body.patientLastName,
+            patientFirstName: req.body.patientFirstName,
+            patientEmail: req.body.patientEmail,
+            roomNumber: req.body.roomNumber,
+            typeOfFeed: req.body.typeOfFeed,
             token: token,
             hash: hash,
             salt: salt,
-            account: {
-              username: req.body.username,
-              address: req.body.address,
-              postalCode: req.body.postalCode,
-              city: req.body.city,
-              state: req.body.state,
-              phone: req.body.phone,
-              sex: req.body.sex,
-            },
-            newsletter: req.body.newsletter,
+            // account: {
+            //   username: req.body.username,
+            //   address: req.body.address,
+            //   postalCode: req.body.postalCode,
+            //   city: req.body.city,
+            //   state: req.body.state,
+            //   phone: req.body.phone,
+            //   sex: req.body.sex,
+            // },
           });
 
           // Si je reçois une image, je l'upload sur cloudinary et j'enregistre le résultat dans la clef avatar de la clef account de mon nouvel utilisateur
@@ -66,35 +71,32 @@ const authCtrl = {
           //   const result = await cloudinary.uploader.upload(
           //     convertToBase64(req.files.avatar),
           //     {
-          //       folder: `api/reactJsApplicationsCluster/users/${newUser._id}`,
+          //       folder: `api/reactJsApplicationsCluster/patients/${newPatient._id}`,
           //       public_id: "avatar",
           //     }
           //   );
-          //   newUser.account.avatar = result;
+          //   newPatient.account.avatar = result;
           // }
 
-          // STEP 3 : sauvegarder ce nouvel user dans la BDD
-          await newUser.save();
+          // STEP 3 : sauvegarder ce nouvel patient dans la BDD
+          await newPatient.save();
           // ATTENTION !! Affiche le résultat sur Postman que quand on lance le server depuis l'api direct et non par la dépendance concurrently"" de Front-end (client)
           res.status(201).json({
-            _id: newUser._id,
-            firstName: newUser.firstName,
-            lastName: newUser.lastName,
-            email: newUser.email,
-            token: newUser.token,
-            account: newUser.account,
-            admin: newUser.admin,
-            userIp: userIp,
-            // address: newUser.address,
-            // postalCode: newUser.postalCode,
-            // city: newUser.city,
-            // state: newUser.state,
-            // phone: newUser.phone,
+            _id: newPatient._id,
+            avatar: newPatient.avatar,
+            patientLastName: newPatient.patientLastName,
+            patientFirstName: newPatient.patientFirstName,
+            patientEmail: newPatient.patientEmail,
+            roomNumber: newPatient.roomNumber,
+            typeOfFeed: newPatient.typeOfFeed,
+            token: newPatient.token,
+            // account: newPatient.account,
+            patientIp: patientIp,
           });
           // return res.status(400).json(res);
           // res.json(res);
         } else {
-          // l'utilisateur n'a pas envoyé les informations requises ?
+          // le patient n'a pas envoyé les informations requises ?
           res.status(400).json({ message: "Missing parameters" });
         }
       }
@@ -108,24 +110,24 @@ const authCtrl = {
   ////////
   login: async (req, res, next) => {
     try {
-      const user = await UserModel.findOne({ email: req.body.email });
+      const patient = await PatientModel.findOne({ email: req.body.email });
 
-      if (user) {
+      if (patient) {
         if (
-          // Recréer un hash à partir du salt du user trouvé et du MDP reçu
-          SHA256(req.body.password + user.salt).toString(encBase64) ===
-          user.hash
+          // Recréer un hash à partir du salt du patient trouvé et du MDP reçu
+          SHA256(req.body.password + patient.salt).toString(encBase64) ===
+          patient.hash
         ) {
           res.status(200).json({
-            _id: user._id,
-            token: user.token,
-            account: user.account,
+            _id: patient._id,
+            token: patient.token,
+            // account: patient.account,
           });
         } else {
           res.status(401).json({ error: "Unauthorized" });
         }
       } else {
-        res.status(400).json({ message: "User not found" });
+        res.status(400).json({ message: "Patient not found" });
       }
     } catch (error) {
       console.log(error.message);
@@ -134,4 +136,4 @@ const authCtrl = {
   },
 };
 
-module.exports = authCtrl;
+module.exports = authPatientCtrl;
