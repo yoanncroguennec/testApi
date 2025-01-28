@@ -13,6 +13,7 @@ const PatientModel = require("../../models/Patient");
 
 const authPatientCtrl = {
   signup: async (req, res, next) => {
+    res.status(300).json({ message: "Bienvenue sur l'API" });
     try {
       const {
         password,
