@@ -14,12 +14,17 @@ const PatientModel = require("../../models/Patient");
 const authPatientCtrl = {
   signup: async (req, res, next) => {
     try {
-      const patient = await PatientModel.findOne({
-        patientEmail: req.body.patientEmail,
-      });
-      if (patient) {
-        res.status(409).json({ message: "Cette email est déjà prise." });
+      const userEmail = await User.findOne({ email: req.fields.email });
+      // const patient = await PatientModel.findOne({
+      //   patientEmail: req.body.patientEmail,
+      // });
+
+      if (userEmail) {
+        res.status(400).json({ error: "This email already has an account." });
       } else {
+        // if (patient) {
+        //   res.status(409).json({ message: "Cette email est déjà prise." });
+        // } else {
         // le patient a bien envoyé les infos requises ?
         if (
           // Les champs OBLIGATOIRE a remplir
