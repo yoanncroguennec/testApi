@@ -14,104 +14,50 @@ const PatientModel = require("../../models/Patient");
 const authPatientCtrl = {
   signup: async (req, res, next) => {
     try {
-      const userEmail = await PatientModel.findOne({
-        email: req.fields.patientEmail,
+      const {
+        password,
+        avatar,
+        patientLastName,
+        patientFirstName,
+        patientEmail,
+        roomNumber,
+        typeOfFeed,
+      } = req.body;
+
+      const patient = await PatientModel.findOne({
+        patientEmail: patientEmail,
       });
-      // const patient = await PatientModel.findOne({
-      //   patientEmail: req.body.patientEmail,
-      // });
 
-      if (userEmail) {
-        res.status(400).json({ error: "This email already has an account." });
+      if (patient === null) {
+        const token = uid2(64);
+        const salt = uid2(16);
+        const hash = SHA256(password + salt).toString(encBase64);
+        console.log("hash", hash);
+        console.log("token, salt", token, salt);
+
+        const newPatient = new PatientModel({
+          avatar: avatar,
+          patientLastName: patientLastName,
+          patientFirstName: patientFirstName,
+          patientEmail: patientEmail,
+          roomNumber: roomNumber,
+          typeOfFeed: typeOfFeed,
+          token: token,
+          salt: salt,
+          hash: hash,
+        });
+        await newPatient.save();
+        res.json({
+          _id: newPatient._id,
+          token: newPatient.token,
+        });
       } else {
-        // if (patient) {
-        //   res.status(409).json({ message: "Cette email est déjà prise." });
-        // } else {
-        // le patient a bien envoyé les infos requises ?
-        if (
-          // Les champs OBLIGATOIRE a remplir
-          req.body.password &&
-          req.body.avatar &&
-          req.body.patientLastName &&
-          req.body.patientFirstName &&
-          req.body.patientEmail &&
-          req.body.roomNumber &&
-          req.body.typeOfFeed
-        ) {
-          // STEP 1 : encrypter le mot de passe
-          // Générer le token et encrypter le mot de passe
-          const token = uid2(64); // Génère Token qui fera 64 caractères de long
-          const salt = uid2(64); // Génère Salt qui fera 64 caractères de long
-          // On concatène le "salt" avec le "passord"
-          // "encBase64" Donner en argument
-          const hash = SHA256(req.body.password + salt).toString(encBase64);
-
-          const patientIp = ip.address();
-          console.log(patientIp);
-
-          // STEP 2 : créer le nouvel utilisateur
-          const newPatient = new PatientModel({
-            // Les champs que le patient à remplit (pas forcément obligatoire)
-            ipAddress: patientIp,
-            avatar: req.body.avatar,
-            patientLastName: req.body.patientLastName,
-            patientFirstName: req.body.patientFirstName,
-            patientEmail: req.body.patientEmail,
-            roomNumber: req.body.roomNumber,
-            typeOfFeed: req.body.typeOfFeed,
-            token: token,
-            hash: hash,
-            salt: salt,
-            // account: {
-            //   username: req.body.username,
-            //   address: req.body.address,
-            //   postalCode: req.body.postalCode,
-            //   city: req.body.city,
-            //   state: req.body.state,
-            //   phone: req.body.phone,
-            //   sex: req.body.sex,
-            // },
-          });
-
-          // Si je reçois une image, je l'upload sur cloudinary et j'enregistre le résultat dans la clef avatar de la clef account de mon nouvel utilisateur
-          // if (req.files?.avatar) {
-          //   const result = await cloudinary.uploader.upload(
-          //     convertToBase64(req.files.avatar),
-          //     {
-          //       folder: `api/reactJsApplicationsCluster/patients/${newPatient._id}`,
-          //       public_id: "avatar",
-          //     }
-          //   );
-          //   newPatient.account.avatar = result;
-          // }
-
-          // STEP 3 : sauvegarder ce nouvel patient dans la BDD
-          await newPatient.save();
-          // ATTENTION !! Affiche le résultat sur Postman que quand on lance le server depuis l'api direct et non par la dépendance concurrently"" de Front-end (client)
-          res.status(201).json({
-            _id: newPatient._id,
-            avatar: newPatient.avatar,
-            patientLastName: newPatient.patientLastName,
-            patientFirstName: newPatient.patientFirstName,
-            patientEmail: newPatient.patientEmail,
-            roomNumber: newPatient.roomNumber,
-            typeOfFeed: newPatient.typeOfFeed,
-            token: newPatient.token,
-            // account: newPatient.account,
-            patientIp: patientIp,
-          });
-          // return res.status(400).json(res);
-          // res.json(res);
-        } else {
-          // le patient n'a pas envoyé les informations requises ?
-          res.status(400).json({ message: "Missing parameters" });
-        }
+        res.status(409).json({ error: "Email déjà utilisé" });
       }
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
   },
-
   ////////
   // LOGIN
   ////////
