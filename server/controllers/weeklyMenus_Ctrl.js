@@ -34,6 +34,31 @@ const weeklyMenus_Ctrl = {
       res.status(500).json({ errorMessage: error.message });
     }
   },
+
+  ///////////////////
+  //// GET WEEKLY MEAL MENU BY ID ////
+  ///////////////////
+  getWeeklyMenu: async (req, res, next) => {
+    try {
+      const user = await WeeklyMenus_Model.findById(req.params.id);
+
+      res.json(user);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  },
+
+  ////////////////////////////////
+  // DELETE WEEKLY MEAL MENU BY ID
+  ////////////////////////////////
+  deleteWeeklyMenuID: async (req, res, next) => {
+    try {
+      await WeeklyMenus_Model.findByIdAndDelete(req.params.id);
+      res.status(201).json("The Weekly Menu  has been delete...");
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
 
 module.exports = weeklyMenus_Ctrl;

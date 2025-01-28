@@ -7,11 +7,15 @@ const patientCtrl = require("../controllers/PatientCtrl");
 //   res.status(400).json({ message: "test" });
 // });
 
-router.route("/").get(patientCtrl.getAllPatients);
-router.route("/:id").get(userCtrl.getUser);
+router
+  .route("/")
+  .get(patientCtrl.getAllPatients)
+  .post(patientCtrl.createPatient);
+
+router.route("/:id").get(patientCtrl.getPatient);
 // PUT
-//   router.put("/updateUser_ViaParamsId/:id", userCtrl.update_UserViaParamsId);
+//   router.put("/updateUser_ViaParamsId/:id", patientCtrl.update_UserViaParamsId);
 // DELETE
-// router.route("/:id").delete(userCtrl.deleteUserByID);
+router.route("/:id").delete(patientCtrl.deletePatientByID);
 
 module.exports = router;

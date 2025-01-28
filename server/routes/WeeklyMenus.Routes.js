@@ -6,8 +6,8 @@ router
   .get(weeklyMenus_Ctrl.getAllWeeklyMenus)
   .post(weeklyMenus_Ctrl.createWeeklyMenus);
 
-// router.get("/:id", weeklyMenus_Ctrl.getUserById);
+router.get("/:id", weeklyMenus_Ctrl.getWeeklyMenu);
 // router.put("/update/:id", weeklyMenus_Ctrl.update);
-// router.delete("/delete/:id", weeklyMenus_Ctrl.deleteUser);
+router.delete("/delete/:id", weeklyMenus_Ctrl.deleteWeeklyMenuID);
 
 module.exports = router;
