@@ -14,7 +14,7 @@ const PatientModel = require("../../models/Patient");
 const authPatientCtrl = {
   signup: async (req, res, next) => {
     try {
-      const userEmail = await User.findOne({ email: req.fields.email });
+      const userEmail = await PatientModel.findOne({ email: req.fields.email });
       // const patient = await PatientModel.findOne({
       //   patientEmail: req.body.patientEmail,
       // });
