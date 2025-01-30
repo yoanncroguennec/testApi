@@ -10,7 +10,6 @@ const mongoose = require("mongoose");
 const UserModel = mongoose.model("User", {
   ipAddress: {
     type: String,
-    required: true,
   },
   firstName: {
     type: String,
@@ -62,7 +61,6 @@ const UserModel = mongoose.model("User", {
       // required: true,
     },
   },
-  newsletter: Boolean,
   token: String,
   hash: String,
   salt: String,

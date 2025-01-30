@@ -35,6 +35,18 @@ const weeklyMenus_Ctrl = {
     }
   },
 
+  ////////
+  // DELETE ALL WEEKLY MEAL MENUS
+  ////////
+  deleteAll_WeeklyMenus: async (req, res, next) => {
+     try {
+       await WeeklyMenus_Model.deleteMany();
+       res.status(201).json("ALL Weekly Menu  has been delete...");
+     } catch (err) {
+       res.status(500).json(err);
+     }
+  },
+
   ///////////////////
   //// GET WEEKLY MEAL MENU BY ID ////
   ///////////////////
