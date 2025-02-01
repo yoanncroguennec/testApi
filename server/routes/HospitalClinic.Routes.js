@@ -8,6 +8,7 @@ const hospitalClinicCtrl = require("../controllers/HospitalClinicCtrl");
 router
   .route("/")
   .get(hospitalClinicCtrl.getAllHospitalClinic)
+  .delete(hospitalClinicCtrl.deleteAllHospitalClinic);
 
 router
   .route("/:id")

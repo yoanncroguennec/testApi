@@ -27,7 +27,7 @@ app.use(
 app.use("/api/weeklyMenus", require("../server/routes/WeeklyMenus.Routes"));
 app.use("/api/patients", require("../server/routes/Patients.Routes"));
 app.use(
-  "/api/auth/hospitalClinic",
+  "/api/hospitalClinic",
   require("../server/routes/HospitalClinic.Routes")
 );
 

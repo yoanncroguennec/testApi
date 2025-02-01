@@ -29,7 +29,7 @@ const weeklyMenus_Ctrl = {
 
       const savedData = await newWeeklyMenus.save();
       // res.status(200).json(savedData);
-      res.status(200).json({ message: "Weekly Menus created successfully." });
+      res.status(200).json({ message: "Menu créé avec succès." });
     } catch (error) {
       res.status(500).json({ errorMessage: error.message });
     }
@@ -66,7 +66,7 @@ const weeklyMenus_Ctrl = {
   deleteWeeklyMenuID: async (req, res, next) => {
     try {
       await WeeklyMenus_Model.findByIdAndDelete(req.params.id);
-      res.status(201).json("The Weekly Menu  has been delete...");
+      res.status(201).json("Le menu a été bien supprimé");
     } catch (err) {
       res.status(500).json(err);
     }

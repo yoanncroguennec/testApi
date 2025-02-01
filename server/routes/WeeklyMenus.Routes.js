@@ -7,8 +7,9 @@ router
   .post(weeklyMenus_Ctrl.createWeeklyMenus)
   .delete(weeklyMenus_Ctrl.deleteAll_WeeklyMenus);
 
-router.get("/:id", weeklyMenus_Ctrl.getWeeklyMenu);
-// router.put("/update/:id", weeklyMenus_Ctrl.update);
-router.delete("/delete/:id", weeklyMenus_Ctrl.deleteWeeklyMenuID);
+router
+  .get("/:id", weeklyMenus_Ctrl.getWeeklyMenu)
+  // .put("/:id", weeklyMenus_Ctrl.updateWeeklyMenuID)
+  .delete("/:id", weeklyMenus_Ctrl.deleteWeeklyMenuID);
 
 module.exports = router;

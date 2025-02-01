@@ -3,7 +3,7 @@ const HospitalClinicModel = require("../models/HospitalClinic");
 
 const hospitalClinicCtrl = {
   ///////////////////////
-  //// GET ALL PATIENTS ////
+  //// GET ALL HospitalClinic ////
   ///////////////////////
   getAllHospitalClinic: async (req, res, next) => {
     try {
@@ -21,13 +21,11 @@ const hospitalClinicCtrl = {
   },
 
   ///////////////////
-  //// GET PATIENT BY ID ////
+  //// GET HospitalClinic BY ID ////
   ///////////////////
   get_HospitalClinicByID: async (req, res, next) => {
     try {
-      const hospitalClinic = await HospitalClinicModel.findById(
-        req.params.id
-      );
+      const hospitalClinic = await HospitalClinicModel.findById(req.params.id);
 
       res.json(hospitalClinic);
     } catch (error) {
@@ -36,7 +34,19 @@ const hospitalClinicCtrl = {
   },
 
   ////////////////////////////////
-  // DELETE PATIENT BY ID
+  // DELETE ALL HospitalClinic
+  ////////////////////////////////
+  deleteAllHospitalClinic: async (req, res, next) => {
+    try {
+      await HospitalClinicModel.deleteMany({});
+      res.status(201).json("All the HospitalClinic has been delete...");
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  ////////////////////////////////
+  // DELETE HospitalClinic BY ID
   ////////////////////////////////
   deleteHospitalClinicByID: async (req, res, next) => {
     try {
