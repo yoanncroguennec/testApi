@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 // AUTH
-app.use("/api/auth", require("../server/routes/auth/Auth.Routes"));
+app.use("/api/auth/patients", require("../server/routes/auth/Auth.Patients.Routes"));
 app.use(
   "/api/auth/hospitalClinic",
   require("../server/routes/auth/Auth.HospitalClinic.Routes")

@@ -15,13 +15,13 @@ const authPatientCtrl = {
   signup: async (req, res, next) => {
     try {
       const {
-        password,
         avatar,
         patientLastName,
         patientFirstName,
         patientEmail,
         roomNumber,
         typeOfFeed,
+        password,
       } = req.body;
 
       const patient = await PatientModel.findOne({
@@ -46,7 +46,9 @@ const authPatientCtrl = {
           salt: salt,
           hash: hash,
         });
+
         await newPatient.save();
+        
         res.json({
           _id: newPatient._id,
           token: newPatient.token,

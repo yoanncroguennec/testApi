@@ -50,7 +50,9 @@ const authHospitalClinicCtrl = {
           salt: salt,
           hash: hash,
         });
+
         await newHospitalClinic.save();
+        
         res.json({
           _id: newHospitalClinic._id,
           token: newHospitalClinic.token,
