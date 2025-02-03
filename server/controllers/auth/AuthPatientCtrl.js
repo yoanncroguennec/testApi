@@ -67,7 +67,9 @@ const authPatientCtrl = {
   ////////
   login: async (req, res, next) => {
     try {
-      const patient = await PatientModel.findOne({ email: req.body.email });
+      const patient = await PatientModel.findOne({
+        patientEmail: req.body.patientEmail,
+      });
 
       if (patient) {
         if (
