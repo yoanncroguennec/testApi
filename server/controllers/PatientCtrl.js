@@ -23,11 +23,11 @@ const patientCtrl = {
   ///////////////////
   //// GET PATIENT BY ID ////
   ///////////////////
-  getPatient: async (req, res, next) => {
+  get_PatientByID: async (req, res, next) => {
     try {
-      const user = await PatientModel.findById(req.params.id);
+      const patient_ID = await PatientModel.findById(req.params.id);
 
-      res.json(user);
+      res.json(patient_ID);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }

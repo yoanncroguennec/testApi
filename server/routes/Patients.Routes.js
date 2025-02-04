@@ -11,7 +11,7 @@ router.route("/").get(patientCtrl.getAllPatients)
 
 router
   .route("/:id")
-  .get(patientCtrl.getPatient)
+  .get(patientCtrl.get_PatientByID)
   // .update_UserViaParamsId);
   .delete(patientCtrl.deletePatientByID);
 
