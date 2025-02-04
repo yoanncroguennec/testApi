@@ -9,10 +9,10 @@ const patientCtrl = require("../controllers/PatientCtrl");
 
 router.route("/").get(patientCtrl.getAllPatients)
 
-router.route("/:id").get(patientCtrl.getPatient);
-// PUT
-//   router.put("/updateUser_ViaParamsId/:id", patientCtrl.update_UserViaParamsId);
-// DELETE
-router.route("/:id").delete(patientCtrl.deletePatientByID);
+router
+  .route("/:id")
+  .get(patientCtrl.getPatient)
+  // .update_UserViaParamsId);
+  .delete(patientCtrl.deletePatientByID);
 
 module.exports = router;
